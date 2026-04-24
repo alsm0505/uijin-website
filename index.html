@@ -5,18 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MINUIJIN Portfolio</title>
     <style>
-        /* --- 기본 리셋 및 폰트 설정 --- */
+        /* --- 기본 설정 --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 깔끔한 산세리프 폰트 */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         body {
             background-color: #ffffff;
             color: #000000;
-            padding: 0 40px; /* 좌우 여백 (image_0 참고) */
+            padding: 0 40px;
         }
 
         a {
@@ -24,176 +24,106 @@
             color: inherit;
         }
 
-        /* --- 1. 헤더 (Header) 스타일 --- */
+        /* --- 헤더 (Header) --- */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 100px; /* 헤더 높이 */
+            height: 100px;
             background-color: #ffffff;
-            position: sticky; /* 스크롤 시 상단 고정 */
+            position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .logo {
             font-size: 24px;
-            font-weight: bold; /* 좌측 로고 볼드 처리 */
+            font-weight: bold; /* 좌측 로고 볼드 */
             letter-spacing: -0.5px;
         }
 
         .nav-links {
             display: flex;
-            gap: 30px; /* 메뉴 간격 */
+            gap: 30px;
         }
 
         .nav-links a {
             font-size: 14px;
             font-weight: 500;
-            text-transform: uppercase; /* 대문자 표시 */
-            color: #333;
+            text-transform: uppercase;
             transition: color 0.3s ease;
         }
 
-        .nav-links a:hover {
-            color: #000000; /* 호버 시 더 진하게 */
-        }
-
-        /* --- 2. 프로젝트 그리드 (Main Content) 스타일 --- */
-        /* image_0의 비정형 그리드를 CSS Grid로 구현 */
+        /* --- 프로젝트 그리드 (3컬럼 수정) --- */
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4열 그리드 */
-            grid-auto-rows: minmax(200px, auto); /* 기본 행 높이 */
-            gap: 20px; /* 타일 간격 */
-            padding-bottom: 60px; /* 하단 여백 */
+            grid-template-columns: repeat(3, 1fr); /* 4열에서 3열로 수정됨 */
+            gap: 25px; /* 간격 살짝 조정 */
+            padding-bottom: 60px;
         }
 
-        /* --- 3. 개별 프로젝트 타일 및 호버 효과 --- */
+        /* --- 프로젝트 카드 및 호버 효과 --- */
         .project-card {
-            position: relative; /* 호버 오버레이 위치 기준 */
+            position: relative;
             overflow: hidden;
-            border-radius: 12px; /* 둥근 모서리 (image_1 참고) */
+            border-radius: 12px;
+            aspect-ratio: 1 / 1; /* 썸네일을 정정사각형으로 통일 (필요 시 제거 가능) */
             cursor: pointer;
-            transition: transform 0.3s ease; /* 살짝 커지는 효과 */
         }
 
-        .project-card:hover {
-            transform: scale(1.02); /* 호버 시 미세하게 확대 */
-        }
-
-        /* 프로젝트 이미지 */
         .project-card img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 이미지가 비율 맞춰 꽉 차게 */
+            object-fit: cover;
             display: block;
+            transition: transform 0.5s ease;
         }
 
-        /* --- 핵심: 호버 시 딤(Dim) 및 페이드인 효과 --- */
+        .project-card:hover img {
+            transform: scale(1.1); /* 호버 시 이미지 미세 확대 */
+        }
+
+        /* 호버 시 나타나는 딤(Dim) 레이어 */
         .project-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* 딤(Dim) 처리: 검은색 60% 투명도 */
+            background-color: rgba(0, 0, 0, 0.6); /* 60% 투명도 딤 처리 */
             display: flex;
             justify-content: center;
             align-items: center;
-            opacity: 0; /* 평소에는 숨김 */
-            transition: opacity 0.4s ease; /* 페이드인 애니메이션 */
+            opacity: 0; /* 평소엔 숨김 */
+            transition: opacity 0.4s ease;
             padding: 20px;
-            text-align: center;
         }
 
         .project-card:hover .project-overlay {
-            opacity: 1; /* 호버 시 등장 */
+            opacity: 1; /* 호버 시 페이드인 */
         }
 
-        /* 오버레이 안의 프로젝트명 text */
         .project-title {
             color: #ffffff;
             font-size: 18px;
             font-weight: 600;
-            letter-spacing: 0.5px;
+            text-align: center;
         }
 
-        /* --- 4. 비정형 그리드 배치 (image_0의 구성을 따름) --- */
-        
-        /* 첫 번째 타일: Studio 텍스트 (image_0 왼쪽 위) */
-        .card-studio {
-            grid-column: span 1; /* 1칸 차지 */
-            grid-row: span 2;    /* 2행 높이 차지 */
-            background-color: #f9f9f9;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 40px;
-        }
-        .card-studio h2 { font-size: 14px; font-weight: 500; color: #666; margin-bottom: 20px; }
-        .card-studio p { font-size: 20px; line-height: 1.5; font-weight: 400; }
-
-        /* 세 번째 타일: Haworth 텍스트 (image_0 오른쪽 위 검은 박스) */
-        .card-haworth-text {
-            grid-column: span 1;
-            background-color: #000000;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .card-haworth-text h3 { font-size: 20px; font-weight: 500; }
-
-        /* 네 번째 타일: 가로로 긴 썸네일 (image_0 오른쪽 중간) */
-        .card-wide {
-            grid-column: span 1;
-            grid-row: span 2; /* 높게 설정 */
-        }
-
-        /* 다섯 번째 타일: 귀 썸네일 (image_0 왼쪽 아래) */
-        .card-ear {
-            grid-column: span 1;
-        }
-
-        /* 여섯 번째 타일: MillerKnoll 로고 (image_0 중앙 아래) */
-        .card-miller-text {
-            grid-column: span 1;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #eee; /* 로고 박스 구분선 */
-        }
-        .card-miller-text h3 { font-size: 24px; font-weight: bold; }
-
-        /* --- 반응형 설정 (모바일) --- */
+        /* 반응형 (모바일) */
         @media (max-width: 768px) {
             body { padding: 0 20px; }
-            header { height: 70px; }
-            .logo { font-size: 20px; }
-            .nav-links { gap: 15px; }
-            .nav-links a { font-size: 12px; }
-
             .portfolio-grid {
-                grid-template-columns: repeat(2, 1fr); /* 모바일에선 2열 */
-                gap: 15px;
+                grid-template-columns: repeat(1, 1fr); /* 모바일에선 1열 */
             }
-            /* 모바일 배치를 위한 초기화 */
-            .card-studio, .card-haworth-text, .card-wide, .card-ear, .card-miller-text {
-                grid-column: span 1;
-                grid-row: span 1;
-            }
-            .card-studio { padding: 20px; }
-            .card-studio p { font-size: 16px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">MINUIJIN</div> <nav class="nav-links">
+        <div class="logo">MINUIJIN</div>
+        <nav class="nav-links">
             <a href="#work">WORK</a>
             <a href="#about">ABOUT</a>
             <a href="#contact">CONTACT</a>
@@ -201,55 +131,61 @@
     </header>
 
     <main class="portfolio-grid">
-
-        <div class="card-studio">
-            <h2>Studio</h2>
-            <p>UIJIN is a multi-disciplinary designer focused on crafting digital experiences.</p>
-        </div>
-
         <div class="project-card">
-            <img src="https://images.unsplash.com/photo-1511285560929-80b45690df98?q=80&w=600&auto=format&fit=crop" alt="Project 1">
+            <img src="work1.jpg" alt="Project 1">
             <div class="project-overlay">
-                <div class="project-title">Project Title One</div>
-            </div>
-        </div>
-
-        <div class="card-haworth-text">
-            <h3>Haworth</h3>
-        </div>
-
-        <div class="project-card card-wide">
-            <img src="https://images.unsplash.com/photo-1549497538-303791108f94?q=80&w=600&auto=format&fit=crop" alt="Project 2">
-            <div class="project-overlay">
-                <div class="project-title">Project Title Two</div>
-            </div>
-        </div>
-
-        <div class="project-card card-ear">
-            <img src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=600&auto=format&fit=crop" alt="Project 3">
-            <div class="project-overlay">
-                <div class="project-title">Project Title Three</div>
-            </div>
-        </div>
-
-        <div class="card-miller-text">
-            <h3>MillerKnoll</h3>
-        </div>
-
-        <div class="project-card">
-            <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=600&auto=format&fit=crop" alt="UI Design">
-            <div class="project-overlay">
-                <div class="project-title">Mobile UI Design</div>
+                <div class="project-title">Project Title 01</div>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="https://images.unsplash.com/photo-1611606101915-c4c0004c8651?q=80&w=600&auto=format&fit=crop" alt="Branding">
+            <img src="work2.jpg" alt="Project 2">
             <div class="project-overlay">
-                <div class="project-title">Brand Identity</div>
+                <div class="project-title">Project Title 02</div>
             </div>
         </div>
 
+        <div class="project-card">
+            <img src="work3.jpg" alt="Project 3">
+            <div class="project-overlay">
+                <div class="project-title">Project Title 03</div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <img src="work4.jpg" alt="Project 4">
+            <div class="project-overlay">
+                <div class="project-title">Project Title 04</div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <img src="work5.jpg" alt="Project 5">
+            <div class="project-overlay">
+                <div class="project-title">Project Title 05</div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <img src="work6.jpg" alt="Project 6">
+            <div class="project-overlay">
+                <div class="project-title">Project Title 06</div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <img src="work7.jpg" alt="Project 7">
+            <div class="project-overlay">
+                <div class="project-title">Project Title 07</div>
+            </div>
+        </div>
+
+        <div class="project-card">
+            <img src="work8.jpg" alt="Project 8">
+            <div class="project-overlay">
+                <div class="project-title">Project Title 08</div>
+            </div>
+        </div>
     </main>
 
 </body>

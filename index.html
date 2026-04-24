@@ -38,7 +38,7 @@
 
         .logo {
             font-size: 24px;
-            font-weight: bold; /* 좌측 로고 볼드 */
+            font-weight: bold;
             letter-spacing: -0.5px;
         }
 
@@ -54,21 +54,22 @@
             transition: color 0.3s ease;
         }
 
-        /* --- 프로젝트 그리드 (3컬럼 수정) --- */
+        /* --- 프로젝트 그리드 (3컬럼) --- */
         .portfolio-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 4열에서 3열로 수정됨 */
-            gap: 25px; /* 간격 살짝 조정 */
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
             padding-bottom: 60px;
         }
 
-        /* --- 프로젝트 카드 및 호버 효과 --- */
+        /* --- 프로젝트 카드 --- */
         .project-card {
             position: relative;
             overflow: hidden;
             border-radius: 12px;
-            aspect-ratio: 1 / 1; /* 썸네일을 정정사각형으로 통일 (필요 시 제거 가능) */
+            aspect-ratio: 1 / 1; /* 정사각형 통일 */
             cursor: pointer;
+            display: block; /* 링크로 감쌀 때 필요 */
         }
 
         .project-card img {
@@ -80,42 +81,94 @@
         }
 
         .project-card:hover img {
-            transform: scale(1.1); /* 호버 시 이미지 미세 확대 */
+            transform: scale(1.05); /* 호버 시 미세 확대 */
         }
 
-        /* 호버 시 나타나는 딤(Dim) 레이어 */
+        /* --- 핵심: 새로운 호버 인터랙션 (Dim + 슬라이딩 페이드인) --- */
         .project-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* 60% 투명도 딤 처리 */
+            background-color: rgba(0, 0, 0, 0.6); /* #000000 60% 딤 처리 */
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
+            justify-content: center; /* 수직 중앙 정렬 */
+            align-items: center;    /* 수평 중앙 정렬 */
             opacity: 0; /* 평소엔 숨김 */
-            transition: opacity 0.4s ease;
+            transition: opacity 0.4s ease; /* 전체 페이드인 */
             padding: 20px;
+            z-index: 10;
         }
 
         .project-card:hover .project-overlay {
-            opacity: 1; /* 호버 시 페이드인 */
+            opacity: 1; /* 호버 시 전체 배경 나타남 */
         }
 
-        .project-title {
+        /* 1. 상단 텍스트 (위에서 아래로) */
+        .hover-text-top {
             color: #ffffff;
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
+            font-size: 28px; /* image_2 참고 */
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: absolute;
+            top: 25%; /* 위치 고정 */
+            
+            /* 애니메이션 초기 상태: 위로 살짝 이동 및 숨김 */
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            transition-delay: 0.1s; /* 살짝 늦게 시작 */
+        }
+
+        .project-card:hover .hover-text-top {
+            /* 호버 시: 원위치 및 나타남 */
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* 2. 하단 화살표 버튼 (아래에서 위로) */
+        .hover-button-bottom {
+            width: 80px; /* image_2 참고 */
+            height: 80px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            bottom: 15%; /* 위치 고정 */
+            
+            /* 애니메이션 초기 상태: 아래로 살짝 이동 및 숨김 */
+            transform: translateY(20px);
+            opacity: 0;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            transition-delay: 0.15s; /* 텍스트보다 살짝 더 늦게 */
+        }
+
+        .project-card:hover .hover-button-bottom {
+            /* 호버 시: 원위치 및 나타남 */
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* 화살표 SVG (검은색) */
+        .hover-button-bottom svg {
+            width: 40px;
+            height: 40px;
         }
 
         /* 반응형 (모바일) */
         @media (max-width: 768px) {
             body { padding: 0 20px; }
             .portfolio-grid {
-                grid-template-columns: repeat(1, 1fr); /* 모바일에선 1열 */
+                grid-template-columns: repeat(1, 1fr); /* 1열 */
             }
+            .hover-text-top { font-size: 20px; top: 30%; }
+            .hover-button-bottom { width: 60px; height: 60px; bottom: 20%; }
+            .hover-button-bottom svg { width: 30px; height: 30px; }
         }
     </style>
 </head>
@@ -131,62 +184,94 @@
     </header>
 
     <main class="portfolio-grid">
+        <svg id="arrow-icon" style="display:none;" viewBox="0 0 24 24">
+            <path d="M11.293 4.707a1 1 0 0 0-1.414 1.414L16.586 13H4a1 1 0 1 0 0 2h12.586l-6.707 6.879a1 1 0 1 0 1.414 1.414l8.5-8.68a1 1 0 0 0 0-1.414l-8.5-8.68Z" fill="#000000"/>
+        </svg>
+
         <div class="project-card">
-            <img src="work1.jpg" alt="Project 1">
+            <img src="work1.jpg" alt="UIUX 1">
             <div class="project-overlay">
-                <div class="project-title">Project Title 01</div>
+                <div class="hover-text-top">UIUX</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="work2.jpg" alt="Project 2">
+            <img src="work2.jpg" alt="UIUX 2">
             <div class="project-overlay">
-                <div class="project-title">Project Title 02</div>
+                <div class="hover-text-top">UIUX</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="work3.jpg" alt="Project 3">
+            <img src="work3.jpg" alt="Promotion 1">
             <div class="project-overlay">
-                <div class="project-title">Project Title 03</div>
+                <div class="hover-text-top">Promotion</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
+            </div>
+        </div>
+
+        <a href="#about" class="project-card"> <img src="work4.jpg" alt="ABOUT Link">
+            <div class="project-overlay">
+                <div class="hover-text-top">ABOUT</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
+            </div>
+        </a>
+
+        <div class="project-card">
+            <img src="work5.jpg" alt="Promotion 2">
+            <div class="project-overlay">
+                <div class="hover-text-top">Promotion</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="work4.jpg" alt="Project 4">
+            <img src="work6.jpg" alt="Promotion 3">
             <div class="project-overlay">
-                <div class="project-title">Project Title 04</div>
+                <div class="hover-text-top">Promotion</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="work5.jpg" alt="Project 5">
+            <img src="work7.jpg" alt="UIUX 3">
             <div class="project-overlay">
-                <div class="project-title">Project Title 05</div>
+                <div class="hover-text-top">UIUX</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
             </div>
         </div>
 
         <div class="project-card">
-            <img src="work6.jpg" alt="Project 6">
+            <img src="work8.jpg" alt="UIUX 4">
             <div class="project-overlay">
-                <div class="project-title">Project Title 06</div>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <img src="work7.jpg" alt="Project 7">
-            <div class="project-overlay">
-                <div class="project-title">Project Title 07</div>
-            </div>
-        </div>
-
-        <div class="project-card">
-            <img src="work8.jpg" alt="Project 8">
-            <div class="project-overlay">
-                <div class="project-title">Project Title 08</div>
+                <div class="hover-text-top">UIUX</div>
+                <div class="hover-button-bottom">
+                    <svg viewBox="0 0 24 24"><use href="#arrow-icon"></use></svg>
+                </div>
             </div>
         </div>
     </main>
+
+    <section id="about" style="height: 100vh; padding: 100px 0;">
+        <h2>About Section</h2>
+        <p>This is where the about information goes.</p>
+    </section>
 
 </body>
 </html>
